@@ -169,7 +169,7 @@ def make_scenery_ini(cfg: ConfigParser, db_sceneries: List[str], cs_sceneries: L
     """
     cfg_ops = cfg[SEC_OPS]
     merge_mode = cfg_ops[OPT_OPS_MERGE]
-    zz_at_end = cfg_ops.getboolean(OPT_OPS_ZZEND, fallback=False)
+    zz_at_end = cfg_ops.getboolean(OPT_OPS_ZZEND, fallback=True)
     zz_sceneries = []
 
     logger.debug('unknown sceneries will be added at the %s of the file' % ('top' if merge_mode == 'top' else 'bottom'))
