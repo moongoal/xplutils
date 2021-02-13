@@ -37,15 +37,26 @@ logger = logging.getLogger('scenery-ini-builder')
 
 
 def init_logging():
+    """Initialise logging."""
     logger.setLevel(logging.WARNING)
     logger.addHandler(logging.StreamHandler())
 
 
 def pformat(data) -> str:
+    """Pretty-format some data.
+
+    Arguments:
+        data -- The data to pretty-format.
+    """
     return PrettyPrinter().pformat(data)
 
 
 def read_config(path: str) -> ConfigParser:
+    """Read the config file.
+
+    Arguments:
+        path -- Path to the config file.
+    """
     parser = ConfigParser()
 
     logger.info('Reading config file %s' % path)
@@ -57,6 +68,11 @@ def read_config(path: str) -> ConfigParser:
 
 
 def read_scenery_list(path: str) -> List[str]:
+    """Read a list file from the DB.
+
+    Arguments:
+        path -- Path to the file to read.
+    """
     logger.info('Reading scenery list %s' % path)
 
     with open(path) as f:
@@ -66,6 +82,11 @@ def read_scenery_list(path: str) -> List[str]:
 
 
 def read_scenery_db(cfg: ConfigParser) -> List[str]:
+    """Read the sceneries from the DB.
+
+    Arguments:
+        cfg -- The configuration.
+    """
     cfg_scen = cfg[SEC_SCENERY]
     scenery_db = []
 
@@ -85,6 +106,11 @@ def read_scenery_db(cfg: ConfigParser) -> List[str]:
 
 
 def read_xpl_custom_scenery(path: str) -> List[str]:
+    """Read sceneries from the custom scenery folder.
+
+    Arguments:
+        path -- Path to X-Plane's custom scenery folder.
+    """
     sceneries = []
 
     logger.info('Scanning custom scenery folder %s' % path)
@@ -107,6 +133,9 @@ def read_xpl_custom_scenery(path: str) -> List[str]:
 
 def read_all_sceneries(cfg: ConfigParser) -> Tuple[List[str], List[str]]:
     """Read sceneries both from the DB and the custom scenery folder.
+
+    Arguments:
+        cfg -- The configuration.
 
     Return value:
         A tuple (db, scen) where `db` is an ordered list of sceneries from the DB and `scen` is the list of sceneries from the
@@ -131,6 +160,13 @@ def read_all_sceneries(cfg: ConfigParser) -> Tuple[List[str], List[str]]:
 
 
 def make_scenery_ini(cfg: ConfigParser, db_sceneries: List[str], cs_sceneries: List[str]) -> str:
+    """Make a string containing the generated scenery_pack.ini file.
+
+    Arguments:
+        cfg -- The configuration.
+        db_sceneries -- List of sceneries loaded from the DB.
+        cs_sceneries -- List of sceneries loaded from the custom scenery folder.
+    """
     cfg_ops = cfg[SEC_OPS]
     merge_mode = cfg_ops[OPT_OPS_MERGE]
     zz_at_end = cfg_ops.getboolean(OPT_OPS_ZZEND, fallback=False)
@@ -156,6 +192,12 @@ def make_scenery_ini(cfg: ConfigParser, db_sceneries: List[str], cs_sceneries: L
 
 
 def write_scenery_ini(cfg: ConfigParser, sini: str):
+    """Write the scenery_pack.ini file.
+
+    Arguments:
+        cfg -- The configuration.
+        sini -- The contents of the ini file.
+    """
     cfg_xpl = cfg[SEC_XPL]
     scen_ini_file = cfg_xpl[OPT_XPL_SCEN_INI] \
         if OPT_XPL_SCEN_INI in cfg_xpl \
@@ -166,6 +208,11 @@ def write_scenery_ini(cfg: ConfigParser, sini: str):
 
 
 def rebuild_scenery_ini(cfg: ConfigParser):
+    """Rebuild the scenery_pack.ini file.
+
+    Arguments:
+        cfg -- The configuration.
+    """
     write_scenery_ini(
         cfg,
         make_scenery_ini(
