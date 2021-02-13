@@ -176,7 +176,7 @@ def make_scenery_ini(cfg: ConfigParser, db_sceneries: List[str], cs_sceneries: L
     logger.debug('zz-sceneries will be added at the %s of the file' % ('bottom' if zz_at_end else 'top'))
 
     if zz_at_end:
-        zz_sceneries = list(filter(lambda s: os.path.basename(s).startswith(('zz', '-zz')), cs_sceneries))
+        zz_sceneries = list(filter(lambda s: os.path.basename(s).startswith(('z', '-z')), cs_sceneries))
         cs_sceneries = list(filter(lambda s: s not in zz_sceneries, cs_sceneries))
 
     sceneries = (cs_sceneries + db_sceneries) if merge_mode == 'top' else (db_sceneries + cs_sceneries)
