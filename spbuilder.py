@@ -179,11 +179,16 @@ def make_scenery_ini(cfg: ConfigParser, db_sceneries: List[str], cs_sceneries: L
         zz_sceneries = list(filter(lambda s: os.path.basename(s).startswith(('z', '-z')), cs_sceneries))
         cs_sceneries = list(filter(lambda s: s not in zz_sceneries, cs_sceneries))
 
+        logger.debug(
+            ('Detected zz-sceneries: %s' % pformat(zz_sceneries))
+            if zz_sceneries else 'No zz-scenery detected'
+        )
+
     sceneries = (cs_sceneries + db_sceneries) if merge_mode == 'top' else (db_sceneries + cs_sceneries)
     sceneries += zz_sceneries
     lines = [
-        'SCENERY_{scen_mode} {scen_path}'.format(
-            scen_mode='PACK' if s[0] != '-' else 'DISABLED',
+        'SCENERY_PACK{scen_mode} {scen_path}'.format(
+            scen_mode='' if s[0] != '-' else '_DISABLED',
             scen_path=(s if s[0] != '-' else s[1:]).replace('\\', '/') + '/'
         ) for s in sceneries
     ]
